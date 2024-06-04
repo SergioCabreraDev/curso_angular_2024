@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="card my-3">
+    <div class="card-header">
+      <h2>Factura</h2>
+    </div>
+
+    <div class="card-body d-grid gap-3">
+      <div>
+        <app-invoice-view [id]="invoice.id" [name]="invoice.name"></app-invoice-view>
+      </div>
+
+      <div>
+        <div class="card-header">
+          <h4>Datos del CLiente</h4>
+        </div>
+
+        <app-client-view [client]="invoice.client"></app-client-view>
+      </div>
+
+      <div>
+        <div class="card-header">
+          <h4>Datos de la Empresa</h4>
+        </div>
+
+        <app-company-view [company]="invoice.company"></app-company-view>
+      </div>
+
+      <div>
+        <div class="card-header">
+          <h4>Detalle de la Factura</h4>
+        </div>
+
+        <app-list-item [items]="invoice.items" (removeEventEmitter)="removeItem($event)"></app-list-item>
+
+        <app-total [total]="invoice.total"></app-total>
+
+        <app-form-item (addItemEventEmitter)="addItemEvent($event)"></app-form-item>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="card-header">
+    <h4>Registrar Usuario</h4>
+</div>
+<form class="p-3" (ngSubmit)="onSubmit(itemForm)" #itemForm="ngForm">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Nombre</label>
+      <input #nombre="ngModel" [(ngModel)]="usuario.nombre" name="nombre" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Apellido</label>
+      <input #apellido="ngModel" [(ngModel)]="usuario.apellido" name="apellido" type="text" class="form-control" id="exampleInputPassword1">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email</label>
+        <input #email="ngModel" [(ngModel)]="usuario.email" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Telefono</label>
+        <input #telefono="ngModel" [(ngModel)]="usuario.telefono" name="telefono" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+
+    <button class="btn btn-primary">Registrar</button>
+  </form>

@@ -1,0 +1,94 @@
+
+<button (click)="setVisible()">
+{{visible? 'Ocultar': 'Mostrar'}}
+</button>
+
+
+
+
+
+@if (visible) {
+  <h2> {{title + " " + users + " " + age}} </h2>
+  <div>Total contador: {{counter}}</div>
+
+
+  @if (users != undefined && users.length > 0) {
+    <table>
+  
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>nombre</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+
+        @for (user of users; track $index) {
+          <tr>
+            <td>{{$index+1}}</td>
+            <td>{{user}}</td>
+          </tr>
+        }
+
+      </tbody>
+    
+    </table>
+  }@else {
+    <p>No hay usuarios</p>
+  }
+
+}@else {
+  <div>
+    no existe registro en el sistema
+  </div>
+}
+
+
+<app-counter [title]="subTitle" (counterEmmit)="setCounter($event)"></app-counter>
+
+
+<!-- Se necesita CommonModule -->
+<!-- <div *ngIf="visible; else notEnable">
+  <h2> {{title + " " + users + " " + age}} </h2>
+</div>
+
+
+<div *ngFor="let item of users">
+
+ {{item}} 
+
+</div>
+
+
+<div *ngIf="visible; else notEnable">
+
+<table *ngIf="(users != undefined && users.length > 0) else isEmpty">
+
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>nombre</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let user of users; index as i;">
+      <td>{{i+1}}</td>
+      <td>{{user}}</td>
+    </tr>
+  </tbody>
+
+</table>
+
+<ng-template #isEmpty>
+  <div>
+    no existe registro en el sistema
+  </div>
+</ng-template>
+
+</div>
+<ng-template #notEnable> 
+  <h2>No disponible</h2>
+</ng-template> -->
+

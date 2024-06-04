@@ -1,0 +1,22 @@
+<div class="card-header">
+    <h4>Usuarios Registrados</h4>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>apellido</th>
+            <th>email</th>
+            <th>telefono</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (user of usuarios; track $index) {
+              
+            <tr app-vista-registros [user]="user" (removeEventEmitter)="onRemove($event)"></tr>
+    
+          }
+    </tbody>
+</table>

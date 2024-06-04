@@ -1,0 +1,13 @@
+<h1 class="h1 d-flex justify-content-center">Gestion de usuarios</h1>
+<div class="container d-flex flex-row mb-3 d-flex justify-content-center grid gap-3">
+   
+    <div class="card w-50 mb-3">
+        <app-tabla-registros [usuarios]="usuarios" (removeEventEmitter)="removeUsuario($event)"></app-tabla-registros>
+      </div>
+      
+
+    <div class="card w-50 mb-3">
+       <app-formulario-registro (addItemEventEmitter)="agregarUsuario($event)"></app-formulario-registro>
+   </div>
+        
+</div>
