@@ -4,6 +4,8 @@ import { ProductCardComponent } from '../product-card/product-card.component';
 import { Router } from '@angular/router';
 import { SharingDataService } from '../../services/sharing-data.service';
 import { ProductService } from '../../services/product.service';
+import { Store } from '@ngrx/store';
+import { load } from '../../store/products.actions';
 
 @Component({
   selector: 'app-catalog',
@@ -18,18 +20,17 @@ export class CatalogComponent implements OnInit {
 
  
  constructor(
-  private productService: ProductService,
-  private sharingDataServiceprivate: SharingDataService, 
-  private router: Router){
-    
-  if(this.router.getCurrentNavigation()?.extras.state){
-  this.productos = this.router.getCurrentNavigation()?.extras.state!['productos'];}
+  private store:Store<{products:any}>,
+  private sharingDataServiceprivate: SharingDataService, ){
+
+    this.store.select('products').subscribe(state => this.productos = state.products)
+
  }
 
   ngOnInit(): void {
-    if(!this.productos){
-      this.productos = this.productService.findAll();
-    }
+    
+    this.store.dispatch(load());
+  
   }
 
  agregarCarrito(product: Product){

@@ -42,6 +42,7 @@ export class CartAppComponent implements OnInit { // Define una clase CartAppCom
   }
 
   ngOnInit(): void { // Método que se ejecuta al inicializar el componente
+    this.store.dispatch(total())
     this.onDeleteCart(); // Llama al método para eliminar items del carrito
     this.agregarCarrito(); // Llama al método para agregar items al carrito
   }
@@ -55,8 +56,6 @@ export class CartAppComponent implements OnInit { // Define una clase CartAppCom
         this.store.dispatch(total()) // Despacha una acción para calcular el total del carrito
         this.saveSession(); // Guarda el estado del carrito en la sesión del navegador
 
-        this.router.navigate(['/cart']);
-
       } else { return } // Si el usuario no confirma, no hace nada
     });
   }
@@ -69,9 +68,6 @@ export class CartAppComponent implements OnInit { // Define una clase CartAppCom
         this.store.dispatch(remove({ id: id })); // Despacha una acción para eliminar el producto del carrito
         this.store.dispatch(total()) // Despacha una acción para calcular el total del carrito
         this.saveSession(); // Guarda el estado del carrito en la sesión del navegador
-
-
-        this.router.navigate(['/cart']);
 
       } else {
         return // Si el usuario no confirma, no hace nada

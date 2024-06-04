@@ -35,7 +35,7 @@ export class CartComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.store.dispatch(total())
+
   }
 
   // Método que se llama para eliminar un producto del carrito.

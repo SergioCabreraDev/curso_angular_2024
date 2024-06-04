@@ -6,9 +6,13 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideStore } from '@ngrx/store';
 import { itemsReducer } from './store/items.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { productReducer } from './store/products.reducer';
+import { provideEffects } from '@ngrx/effects';
+import { ProductsEffects } from './store/effects/products.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(), provideStore({
         items: itemsReducer,
-    }), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
+        products: productReducer
+    }), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }), provideEffects(ProductsEffects)]
 };
