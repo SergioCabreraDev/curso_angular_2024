@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user';
 import { CommonModule } from '@angular/common';
+import { UserComponent } from './user/user.component';
+import { FormUserComponent } from './form-user/form-user.component';
 
 @Component({
   selector: 'user-app',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UserComponent, FormUserComponent],
   templateUrl: './user-app.component.html',
   styleUrl: './user-app.component.css'
 })
@@ -20,7 +22,11 @@ export class UserAppComponent implements OnInit {
 
  }
   ngOnInit(): void {
-  //  this.service.findAll().subscribe(users => this.users = users);
+   this.service.findAll().subscribe(users => this.users = users);
+  }
+
+  addUser(user: User){
+    this.users = [... this.users, {... user}];
   }
 
 }

@@ -1,0 +1,84 @@
+
+<form class="form" (ngSubmit)="onSubmit(itemForm)" #itemForm="ngForm">
+    <p class="title">Register </p>
+    <p class="message">Signup now and get full access to our app. </p>
+      
+        <label>
+            <input class="input" type="text" placeholder="" required="" [(ngModel)]="user.name" name="name" required #name="ngModel">
+            <span>Name</span>
+        </label>
+
+        <ng-container *ngIf="name.invalid && (name.dirty || name.touched)">
+            <ng-container *ngIf="name.errors!['required']">
+                <div class="" style="color: red; font-style: italic;">
+                    Nombre Invalido
+                  </div>
+            </ng-container>
+        </ng-container>
+
+        <label>
+            <input class="input" type="text" placeholder="" required="" [(ngModel)]="user.lastname" name="lastname" required #lastname="ngModel">
+            <span>Lastname</span>
+        </label>
+   
+        <ng-container *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)">
+            <ng-container *ngIf="lastname.errors!['required']">
+                <div class="" style="color: red; font-style: italic;">
+                    Apellidos Invalidos
+                  </div>
+            </ng-container>
+        </ng-container>
+
+    <label>
+        <input class="input" type="text" placeholder="" required="" [(ngModel)]="user.username" name="username" required #username="ngModel">
+        <span>Username</span>
+    </label> 
+
+        <ng-container *ngIf="username.invalid && (username.dirty || username.touched)">
+            <ng-container *ngIf="username.errors!['required']">
+                <div class="" style="color: red; font-style: italic;">
+                    Username Invalido
+                </div>
+            </ng-container>
+        </ng-container>
+
+    <label>
+        <input class="input" type="email" placeholder="" required="" [(ngModel)]="user.email" name="email" required #email="ngModel" email>
+        <span>Email</span>
+    </label> 
+
+        <ng-container *ngIf="email.invalid && (email.dirty || email.touched)">
+            <ng-container *ngIf="email.errors!['required']">
+                <div class="" style="color: red; font-style: italic;">
+                    Email Requerido
+                </div>
+            </ng-container>
+            <ng-container *ngIf="email.errors!['email']">
+                <div class="" style="color: red; font-style: italic;">
+                    Formato de email no válido
+                </div>
+            </ng-container>
+        </ng-container>
+        
+        <label>
+            <input minlength="8" class="input" type="password" placeholder="" required [(ngModel)]="user.password" name="password" #password="ngModel">
+            <span>Password</span>
+        </label>
+        
+        <ng-container *ngIf="password.invalid && (password.dirty || password.touched)">
+            <ng-container *ngIf="password.errors!['required']">
+                <div class="" style="color: red; font-style: italic;">
+                    Contraseña es requerida
+                </div>
+            </ng-container>
+            <ng-container *ngIf="password.errors?.['minlength']">
+                <div class="" style="color: red; font-style: italic;">
+                    Contraseña debe tener al menos 8 caracteres
+                </div>
+            </ng-container>
+        </ng-container>
+        
+
+    <button class="submit" [disabled]="itemForm.invalid">Submit</button>
+    <!-- <p class="signin">Already have an acount ? <a href="#">Signin</a> </p> -->
+</form>
