@@ -6,6 +6,7 @@
         <th scope="col">Last</th>
         <th scope="col">Email</th>
         <th scope="col">Username</th>
+        <th scope="col">Remove</th>
       </tr>
     </thead>
     <tbody>
@@ -22,6 +23,8 @@
         <td>{{ item.lastname }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.username }}</td>
+        <td><button (click)="emitUserId(item.id)" class="btn btn-danger btn-sm">Remove</button></td>
+  
       </tr>
     </tbody>
   </table>

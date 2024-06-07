@@ -1,5 +1,5 @@
 <div class="container">
-  <user [users]="users"></user>
+  <user (idUserEventEmitter)="removeUser($event)" [users]="users"></user>
   <form-user (newUserEventEmitter)="addUser($event)"></form-user>
 </div>
 

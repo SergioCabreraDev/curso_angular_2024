@@ -23,7 +23,7 @@ export class FormularioRegistroComponent { // Definición de la clase del compon
 
   onSubmit(itemForm: NgForm): void { // Método que se llama cuando se envía el formulario
     if (itemForm.valid) { // Verifica si el formulario es válido
-      this.addItemEventEmitter.emit({ id: this.counterId, ...this.usuario }); // Emite un evento con los datos del nuevo usuario
+        this.addItemEventEmitter.emit({ id: this.counterId, ...this.usuario }); // Emite un evento con los datos del nuevo usuario
       this.counterId ++; // Incrementa el contador de IDs para el próximo usuario
       this.usuario = { // Reinicia los datos del usuario para el próximo ingreso
         nombre: '',

@@ -13,6 +13,7 @@ import { FormUserComponent } from './form-user/form-user.component';
   styleUrl: './user-app.component.css'
 })
 export class UserAppComponent implements OnInit {
+
  title: string= 'Listado Usuarios';
 
  users: User[] = [];
@@ -29,4 +30,7 @@ export class UserAppComponent implements OnInit {
     this.users = [... this.users, {... user}];
   }
 
+  removeUser(id: Number) {
+   this.users = this.users.filter(user => user.id != id)
+    }
 }
