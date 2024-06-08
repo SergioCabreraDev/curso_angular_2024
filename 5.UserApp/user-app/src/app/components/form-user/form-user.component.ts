@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
@@ -13,8 +13,9 @@ import { CommonModule } from '@angular/common';
 })
 export class FormUserComponent {
 
-  user: User;
+  @Input() user: User;
   @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
+
 
   id: number = 3;
 
@@ -24,8 +25,8 @@ export class FormUserComponent {
 
   onSubmit(itemForm: NgForm): void {
     if (itemForm.valid) {
-      this.id++;
-      this.user.id = this.id;
+      // this.id++;
+      // this.user.id = this.id;
       this.newUserEventEmitter.emit(this.user);
       console.log(this.user);
       itemForm.reset();

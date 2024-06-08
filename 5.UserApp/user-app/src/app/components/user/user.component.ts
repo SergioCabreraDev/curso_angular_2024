@@ -15,13 +15,8 @@ export class UserComponent {
   @Input() users: User[] = [];
 
   @Output() idUserEventEmitter = new EventEmitter();
-  // emitUserId(id: number){
-  //   this.showConfirmAlert();
-  //   const confirmRemove = confirm('Desea Eliminar El Usuario?');
-  //   if(!confirmRemove){return;}
-    
-  //   this.showAlert();
-  // }
+
+  @Output() updateSelectedUserEmitter = new EventEmitter();
 
 
   emitUserId(id: number) {
@@ -48,5 +43,17 @@ export class UserComponent {
       }
     });
   }
+
+
+
+
+
+  updateSelectedUser(user: User): void{
+
+    this.updateSelectedUserEmitter.emit(user);
+
+  }
+
+
 
 }

@@ -14,23 +14,40 @@ import { FormUserComponent } from './form-user/form-user.component';
 })
 export class UserAppComponent implements OnInit {
 
- title: string= 'Listado Usuarios';
+  title: string = 'Listado Usuarios';
 
- users: User[] = [];
+  users: User[] = [];
+
+  userSelected: User;
 
 
- constructor(private service: UserService){
+  constructor(private service: UserService) {
 
- }
+    this.userSelected = new User();
+
+  }
   ngOnInit(): void {
-   this.service.findAll().subscribe(users => this.users = users);
+    this.service.findAll().subscribe(users => this.users = users);
   }
 
-  addUser(user: User){
-    this.users = [... this.users, {... user}];
+  addUser(user: User) {
+    console.log(user.id)
+    if (user.id > 0) {
+      this.users = this.users.map(u => (u.id == user.id)? {... user}: u)
+    } else {
+      this.users = [... this.users, { ...user }];
+    }
+    this.userSelected= new User(); //reiniciamos userSelected
   }
 
   removeUser(id: Number) {
-   this.users = this.users.filter(user => user.id != id)
-    }
+    this.users = this.users.filter(user => user.id != id)
+  }
+
+
+  updateUser(user: User) {
+    this.userSelected = { ...user };
+   
+  }
+
 }

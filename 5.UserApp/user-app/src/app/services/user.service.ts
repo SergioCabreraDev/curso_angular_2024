@@ -13,15 +13,15 @@ export class UserService {
     lastname: 'guzman',
     email: 'andres@gmail.com',
     username: 'andres11',
-    password: '1234'
+    password: '12343242343'
   },
   {
     id:2,
     name: 'lucas',
     lastname: 'mendo',
     email: 'lucas@gmail.com',
-    username: 'lucas3224',
-    password: '123'
+    username: 'lucas756',
+    password: '1233242323'
   },
   {
     id:3,
@@ -29,7 +29,7 @@ export class UserService {
     lastname: 'cabra',
     email: 'sergio@gmail.com',
     username: 'sergio322',
-    password: '123'
+    password: '12345676575'
   }
 ];
   constructor() { }

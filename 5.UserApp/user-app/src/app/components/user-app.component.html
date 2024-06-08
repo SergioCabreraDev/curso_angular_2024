@@ -1,6 +1,6 @@
 <div class="container">
-  <user (idUserEventEmitter)="removeUser($event)" [users]="users"></user>
-  <form-user (newUserEventEmitter)="addUser($event)"></form-user>
+  <user (updateSelectedUserEmitter)="updateUser($event)" (idUserEventEmitter)="removeUser($event)" [users]="users"></user>
+  <form-user [user]="userSelected" (newUserEventEmitter)="addUser($event)"></form-user>
 </div>
 
 
