@@ -1,0 +1,173 @@
+<div class="modal" tabindex="-1" style="display: block;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Form {{(user.id > 0)? 'Update': 'Create'}} User</h5>
+              <button 
+              (click)="onOpenClose()"
+              type="button" 
+              class="btn-close" 
+              data-bs-dismiss="modal" 
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+
+
+
+
+
+
+<form class="form" (ngSubmit)="onSubmit(itemForm)" #itemForm="ngForm">
+  <div class="input-container">
+    <input
+      placeholder="Enter Name"
+      class="input-field"
+      type="text"
+      required=""
+      [(ngModel)]="user.name"
+      name="name"
+      required
+      #name="ngModel"
+    />
+    <label for="input-field" class="input-label">Name</label>
+    <span class="input-highlight"></span>
+  </div>
+
+  <ng-container *ngIf="name.invalid && (name.dirty || name.touched)">
+    <ng-container *ngIf="name.errors!['required']">
+      <div class="" style="color: red; font-style: italic">Nombre Invalido</div>
+    </ng-container>
+  </ng-container>
+
+  <div class="input-container">
+    <input
+      placeholder="Enter Lastname"
+      class="input-field"
+      type="text"
+      required=""
+      [(ngModel)]="user.lastname"
+      name="lastname"
+      required
+      #lastname="ngModel"
+    />
+    <label for="input-field" class="input-label">Lastname</label>
+    <span class="input-highlight"></span>
+  </div>
+
+  <ng-container
+    *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)"
+  >
+    <ng-container *ngIf="lastname.errors!['required']">
+      <div class="" style="color: red; font-style: italic">
+        Apellidos Invalidos
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div class="input-container">
+    <input class="input" class="input-field" type="text" placeholder="Enter Username" required="" [(ngModel)]="user.username" name="username" required #username="ngModel">
+    <label for="input-field" class="input-label">Username</label>
+    <span class="input-highlight"></span>
+  </div>
+
+  <ng-container
+    *ngIf="username.invalid && (username.dirty || username.touched)"
+  >
+    <ng-container *ngIf="username.errors!['required']">
+      <div class="" style="color: red; font-style: italic">
+        Username Invalido
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div class="input-container">
+    <input
+      class="input-field"
+      type="email"
+      placeholder="Enter Email"
+      required=""
+      [(ngModel)]="user.email"
+      name="email"
+      required
+      #email="ngModel"
+      email
+    />
+    <label for="input-field" class="input-label">Email</label>
+    <span class="input-highlight"></span>
+  </div>
+
+  <ng-container *ngIf="email.invalid && (email.dirty || email.touched)">
+    <ng-container *ngIf="email.errors!['required']">
+      <div class="" style="color: red; font-style: italic">Email Requerido</div>
+    </ng-container>
+    <ng-container *ngIf="email.errors!['email']">
+      <div class="" style="color: red; font-style: italic">
+        Formato de email no válido
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div class="input-container">
+    <input
+      minlength="8"
+      class="input-field"
+      type="password"
+      placeholder="Enter Password"
+      required
+      [(ngModel)]="user.password"
+      name="password"
+      #password="ngModel"
+    />
+    <label for="input-field" class="input-label">Password</label>
+    <span class="input-highlight"></span>
+  </div>
+
+  <ng-container
+    *ngIf="password.invalid && (password.dirty || password.touched)"
+  >
+    <ng-container *ngIf="password.errors!['required']">
+      <div class="" style="color: red; font-style: italic">
+        Contraseña es requerida
+      </div>
+    </ng-container>
+    <ng-container *ngIf="password.errors?.['minlength']">
+      <div class="" style="color: red; font-style: italic">
+        Contraseña debe tener al menos 8 caracteres
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <button [disabled]="itemForm.invalid">
+    <span class="circle1"></span>
+    <span class="circle2"></span>
+    <span class="circle3"></span>
+    <span class="circle4"></span>
+    <span class="circle5"></span>
+    <span class="text">{{ user.id > 0 ? "Update" : "Create" }}</span>
+  </button>
+  <button lass="button" (click)="onClear(itemForm)">
+    <span class="circle1"></span>
+    <span class="circle2"></span>
+    <span class="circle3"></span>
+    <span class="circle4"></span>
+    <span class="circle5"></span>
+    <span class="text">Borrar</span></button>
+
+  <!-- <p class="signin">Already have an acount ? <a href="#">Signin</a> </p> -->
+</form>
+
+
+
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+    (click)="onOpenClose()">Close</button>
+</div>
+</div>
+</div>
+</div>
