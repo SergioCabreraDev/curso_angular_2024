@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './user/user.component';
 import { FormUserComponent } from './form-user/form-user.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'user-app',
@@ -13,6 +14,9 @@ import { FormUserComponent } from './form-user/form-user.component';
   styleUrl: './user-app.component.css'
 })
 export class UserAppComponent implements OnInit {
+closeModal() {
+throw new Error('Method not implemented.');
+}
 
   title: string = 'Listado Usuarios';
 
@@ -20,6 +24,7 @@ export class UserAppComponent implements OnInit {
 
   userSelected: User;
 
+  open: boolean = false;
 
   constructor(private service: UserService) {
 
@@ -31,14 +36,37 @@ export class UserAppComponent implements OnInit {
   }
 
   addUser(user: User) {
-    console.log(user.id)
+    // Imprime el ID del usuario en la consola para propósitos de depuración
+    console.log(user.id);
+  
+    // Verifica si el ID del usuario es mayor que 0
     if (user.id > 0) {
-      this.users = this.users.map(u => (u.id == user.id)? {... user}: u)
+      // Si el ID del usuario es mayor que 0, se asume que es un usuario existente.
+      // Se actualiza la lista de usuarios reemplazando el usuario con el mismo ID
+      // con los nuevos datos del usuario.
+      this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
     } else {
-      this.users = [... this.users, { ...user }];
+      // Si el ID del usuario no es mayor que 0, se asume que es un nuevo usuario.
+      // Se agrega el nuevo usuario a la lista de usuarios.
+      this.users = [...this.users, { ...user }];
     }
-    this.userSelected= new User(); //reiniciamos userSelected
+  
+    // Muestra una alerta de éxito utilizando SweetAlert2
+    Swal.fire({
+      icon: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  
+    // Llama a una función para cerrar un modal o limpiar un formulario
+    this.setOpen();
+  
+    // Reinicializa userSelected para preparar la entrada de un nuevo usuario
+    // o la actualización de otro usuario
+    this.userSelected = new User(); // reiniciamos userSelected
   }
+  
 
   removeUser(id: Number) {
     this.users = this.users.filter(user => user.id != id)
@@ -46,8 +74,15 @@ export class UserAppComponent implements OnInit {
 
 
   updateUser(user: User) {
+    this.setOpen();
     this.userSelected = { ...user };
    
   }
+
+  setOpen(){
+    this.open = !this.open;
+  }
+
+  
 
 }

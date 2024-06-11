@@ -13,8 +13,10 @@ import { CommonModule } from '@angular/common';
 })
 export class FormUserComponent {
 
+
   @Input() user: User;
   @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
+  @Output() modalEventEmitter = new EventEmitter();
 
 
   id: number = 3;
@@ -34,5 +36,12 @@ export class FormUserComponent {
     }
 
 
+  }
+  onClear(itemForm: NgForm){
+    itemForm.reset();
+    itemForm.resetForm();
+  }
+  onOpenClose(){
+    this.modalEventEmitter.emit();
   }
 }

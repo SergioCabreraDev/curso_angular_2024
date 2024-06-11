@@ -1,6 +1,20 @@
+
+
 <div class="container">
+
+
+
   <user (updateSelectedUserEmitter)="updateUser($event)" (idUserEventEmitter)="removeUser($event)" [users]="users"></user>
-  <form-user [user]="userSelected" (newUserEventEmitter)="addUser($event)"></form-user>
+  <button class="btn btn-primary" href="#demo-modal" (click)="setOpen()">{{(open)? 'Cerrar Formulario': 'Abrir Folmulario'}}</button>
+
+  @if (open) {
+    
+    <form-user [user]="userSelected" (newUserEventEmitter)="addUser($event)" (modalEventEmitter)="setOpen()"></form-user>
+    
+  }@else {
+    
+  }
+  
 </div>
 
 
