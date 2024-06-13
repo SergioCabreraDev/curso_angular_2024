@@ -64,7 +64,7 @@ export class UserComponent {
 
   updateSelectedUser(user: User): void{
 
-    this.router.navigate(['/users/edit', user.id], {state: {user}});
+    this.router.navigate(['/users/edit', user], {state: {user}});
 
   }
 

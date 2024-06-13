@@ -14,79 +14,75 @@ import { SharingDataService } from '../services/sharing-data.service';
   styleUrl: './user-app.component.css'
 })
 export class UserAppComponent implements OnInit {
-closeModal() {
-throw new Error('Method not implemented.');
-}
-
+  
+  // Array para almacenar los usuarios
   users: User[] = [];
 
+  // Inyectamos los servicios y el router en el constructor
+  constructor(private service: UserService, private sharingData: SharingDataService, private router: Router) {}
 
-
-  constructor(private service: UserService, private sharingData: SharingDataService, private router: Router) {
-    
-  
-  }
+ 
   ngOnInit(): void {
+    // Llama al servicio para obtener todos los usuarios y los almacena en el array 'users'
     this.service.findAll().subscribe(users => this.users = users);
+
+    // Llama a los métodos que se suscriben a los eventos del SharingDataService
     this.addUser();
     this.removeUser();
     this.findUserById();
   }
 
-  findUserById(){
+  // Método para encontrar un usuario por ID
+  findUserById() {
+    // Se suscribe al evento 'findUserByIdEmitter' del SharingDataService
     this.sharingData.findUserByIdEmitter.subscribe(id => {
-      const user= this.users.find(user => user.id == id);
+      // Encuentra el usuario en el array 'users' por su ID
+      const user = this.users.find(user => user.id == id);
+      // Emite el usuario encontrado a través del 'selectUserEmitter'
       this.sharingData.selectUserEmitter.emit(user);
-    })
+    });
   }
 
+  // Método para agregar o actualizar un usuario
   addUser() {
+    // Se suscribe al evento 'newUserEventEmitter' del SharingDataService
     this.sharingData.newUserEventEmitter.subscribe(user => {
-
       console.log(user.id);
-  
-      // Verifica si el ID del usuario es mayor que 0
+
+      // Verifica si el ID del usuario es mayor que 0 (usuario existente)
       if (user.id > 0) {
-        // Si el ID del usuario es mayor que 0, se asume que es un usuario existente.
-        // Se actualiza la lista de usuarios reemplazando el usuario con el mismo ID
-        // con los nuevos datos del usuario.
+        // Actualiza el usuario en el array 'users' reemplazando el usuario existente con los nuevos datos
         this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
-        this.router.navigate(['/users'], {state: {users: this.users}});
+        // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
+        this.router.navigate(['/users'], { state: { users: this.users } });
       } else {
-        // Si el ID del usuario no es mayor que 0, se asume que es un nuevo usuario.
-        // Se agrega el nuevo usuario a la lista de usuarios.
+        // Si el ID no es mayor que 0, se asume que es un nuevo usuario y se agrega al array 'users'
         this.users = [...this.users, { ...user }];
-        this.router.navigate(['/users'], {state: {users: this.users}});
+        // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
+        this.router.navigate(['/users'], { state: { users: this.users } });
       }
-    
-      // Muestra una alerta de éxito utilizando SweetAlert2
+
+      // Muestra una alerta de éxito usando SweetAlert2
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",
         showConfirmButton: false,
         timer: 1500
       });
-    })
-
-    // Reinicializa userSelected para preparar la entrada de un nuevo usuario
-    // o la actualización de otro usuario
-   
+    });
   }
-  
 
+  // Método para eliminar un usuario
   removeUser() {
+    // Se suscribe al evento 'idUserEventEmitter' del SharingDataService
     this.sharingData.idUserEventEmitter.subscribe(id => {
+      // Filtra el array 'users' eliminando el usuario con el ID especificado
       this.users = this.users.filter(user => user.id != id);
-      this.router.navigate(['/users/create'], {skipLocationChange: true}).then(()=>{
-        this.router.navigate(['/users'], {state: {users: this.users}})
-      })
-    })
-
+      // Navega a una ruta temporal '/users/create' para forzar la recarga de la lista de usuarios
+      this.router.navigate(['/users/create'], { skipLocationChange: true }).then(() => {
+        // Luego navega de vuelta a la ruta '/users' pasando los usuarios actualizados en el estado
+        this.router.navigate(['/users'], { state: { users: this.users } });
+      });
+    });
   }
-
-
-
-
-  
-
 }
