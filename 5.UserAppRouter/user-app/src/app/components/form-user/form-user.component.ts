@@ -2,6 +2,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
+import { SharingDataService } from '../../services/sharing-data.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,22 +16,27 @@ import { CommonModule } from '@angular/common';
 export class FormUserComponent {
 
 
-  @Input() user: User;
-  @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
-  @Output() modalEventEmitter = new EventEmitter();
+  user: User;
+
+  
+
 
 
   id: number = 3;
 
-  constructor() {
-    this.user = new User();
+  constructor(private sharingData: SharingDataService, private router:Router) {
+    if(this.router.getCurrentNavigation()?.extras.state){
+      this.user = this.router.getCurrentNavigation()?.extras.state!['user'];
+    }else{
+      this.user = new User();
+    }
   }
 
   onSubmit(itemForm: NgForm): void {
     if (itemForm.valid) {
       // this.id++;
       // this.user.id = this.id;
-      this.newUserEventEmitter.emit(this.user);
+      this.sharingData.newUserEventEmitter.emit(this.user);
       console.log(this.user);
       itemForm.reset();
       itemForm.resetForm();
@@ -41,7 +48,5 @@ export class FormUserComponent {
     itemForm.reset();
     itemForm.resetForm();
   }
-  onOpenClose(){
-    this.modalEventEmitter.emit();
-  }
+
 }

@@ -1,22 +1,35 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter } from '@angular/core';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { SharingDataService } from '../../services/sharing-data.service';
 
 
 @Component({
   selector: 'user',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']  // Corregir 'styleUrl' a 'styleUrls'
 })
 export class UserComponent {
   @Input() users: User[] = [];
 
-  @Output() idUserEventEmitter = new EventEmitter();
 
-  @Output() updateSelectedUserEmitter = new EventEmitter();
+
+  constructor(
+    private router: Router, 
+    private service: UserService,
+    private sharingData: SharingDataService){
+    if(this.router.getCurrentNavigation()?.extras.state){
+      this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
+    }else{
+      this.service.findAll().subscribe(users => this.users= users);
+    }
+
+  }
 
 
   emitUserId(id: number) {
@@ -35,7 +48,8 @@ export class UserComponent {
           'success'
         );
 
-        this.idUserEventEmitter.emit(id);
+        this.sharingData.idUserEventEmitter.emit(id);
+        console.log(id)
 
       } else if (result.dismiss === Swal.DismissReason.cancel) {
 
@@ -50,7 +64,7 @@ export class UserComponent {
 
   updateSelectedUser(user: User): void{
 
-    this.updateSelectedUserEmitter.emit(user);
+    this.router.navigate(['/users/edit', user.id], {state: {user}});
 
   }
 

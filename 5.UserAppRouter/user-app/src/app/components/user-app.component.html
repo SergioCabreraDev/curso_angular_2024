@@ -1,19 +1,11 @@
-
+<app-navbar [users]="users"  ></app-navbar>
 
 <div class="container">
 
 
+<router-outlet></router-outlet>
 
-  <user (updateSelectedUserEmitter)="updateUser($event)" (idUserEventEmitter)="removeUser($event)" [users]="users"></user>
-  <button class="btn btn-primary" href="#demo-modal" (click)="setOpen()">{{(open)? 'Cerrar Formulario': 'Abrir Folmulario'}}</button>
 
-  @if (open) {
-    
-    <form-user [user]="userSelected" (newUserEventEmitter)="addUser($event)" (modalEventEmitter)="setOpen()"></form-user>
-    
-  }@else {
-    
-  }
   
 </div>
 
