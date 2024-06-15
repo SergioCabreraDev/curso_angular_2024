@@ -51,13 +51,18 @@ export class UserAppComponent implements OnInit {
 
       // Verifica si el ID del usuario es mayor que 0 (usuario existente)
       if (user.id > 0) {
-        // Actualiza el usuario en el array 'users' reemplazando el usuario existente con los nuevos datos
-        this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
+        this.service.update(user).subscribe(userUpdate => {
+          // Actualiza el usuario en el array 'users' reemplazando el usuario existente con los nuevos datos
+          this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+        })       
         // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
         this.router.navigate(['/users'], { state: { users: this.users } });
       } else {
-        // Si el ID no es mayor que 0, se asume que es un nuevo usuario y se agrega al array 'users'
-        this.users = [...this.users, { ...user }];
+        this.service.create(user).subscribe(userNew => {
+          // Si el ID no es mayor que 0, se asume que es un nuevo usuario y se agrega al array 'users'
+          this.users = [...this.users, { ...userNew }];
+        })
+
         // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
         this.router.navigate(['/users'], { state: { users: this.users } });
       }
