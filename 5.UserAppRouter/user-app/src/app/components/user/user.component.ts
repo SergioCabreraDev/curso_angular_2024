@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter } from '@angular/core';
+import { Component, Input, EventEmitter, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ import { SharingDataService } from '../../services/sharing-data.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']  // Corregir 'styleUrl' a 'styleUrls'
 })
-export class UserComponent {
+export class UserComponent implements OnInit{
   @Input() users: User[] = [];
 
 
@@ -22,13 +22,11 @@ export class UserComponent {
   constructor(
     private router: Router, 
     private service: UserService,
-    private sharingData: SharingDataService){
-    if(this.router.getCurrentNavigation()?.extras.state){
-      this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
-    }else{
-      this.service.findAll().subscribe(users => this.users= users);
-    }
+    private sharingData: SharingDataService){}
 
+
+  ngOnInit(): void {
+    this.service.findAll().subscribe(users => this.users= users);
   }
 
 
@@ -58,13 +56,9 @@ export class UserComponent {
     });
   }
 
-
-
-
-
   updateSelectedUser(user: User): void{
 
-    this.router.navigate(['/users/edit', user], {state: {user}});
+    this.router.navigate(['/users/edit', user.id]);
 
   }
 

@@ -34,13 +34,13 @@ export class FormUserComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    // this.sharingData.selectUserEmitter.subscribe(user => this.user = user);
+ 
 
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');
 
       if(id>0){
-        // this.sharingData.findUserByIdEmitter.emit(id);
+
         this.service.findById(id).subscribe(user => this.user = user )
 
       }

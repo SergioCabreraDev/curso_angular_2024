@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'user-app',
@@ -19,7 +20,11 @@ export class UserAppComponent implements OnInit {
   users: User[] = [];
 
   // Inyectamos los servicios y el router en el constructor
-  constructor(private service: UserService, private sharingData: SharingDataService, private router: Router) {}
+  constructor(
+    private service: UserService, 
+    private sharingData: SharingDataService,
+    private cdr: ChangeDetectorRef, 
+    private router: Router) {}
 
  
   ngOnInit(): void {
@@ -56,15 +61,16 @@ export class UserAppComponent implements OnInit {
           this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
         })       
         // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
-        this.router.navigate(['/users'], { state: { users: this.users } });
+        this.router.navigate(['/users']);
       } else {
         this.service.create(user).subscribe(userNew => {
           // Si el ID no es mayor que 0, se asume que es un nuevo usuario y se agrega al array 'users'
           this.users = [...this.users, { ...userNew }];
         })
+        // this.cdr.detectChanges();
+        // Luego navega de vuelta a la ruta '/users' 
+        this.router.navigate(['/users']);
 
-        // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
-        this.router.navigate(['/users'], { state: { users: this.users } });
       }
 
       // Muestra una alerta de éxito usando SweetAlert2
