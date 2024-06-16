@@ -87,12 +87,16 @@ export class UserAppComponent implements OnInit {
   removeUser() {
     // Se suscribe al evento 'idUserEventEmitter' del SharingDataService
     this.sharingData.idUserEventEmitter.subscribe(id => {
+      
+      this.service.remove(id).subscribe(() =>{
+        this.users = this.users.filter(user => user.id != id);
+      })
       // Filtra el array 'users' eliminando el usuario con el ID especificado
       this.users = this.users.filter(user => user.id != id);
       // Navega a una ruta temporal '/users/create' para forzar la recarga de la lista de usuarios
       this.router.navigate(['/users/create'], { skipLocationChange: true }).then(() => {
         // Luego navega de vuelta a la ruta '/users' pasando los usuarios actualizados en el estado
-        this.router.navigate(['/users'], { state: { users: this.users } });
+        this.router.navigate(['/users']);
       });
     });
   }

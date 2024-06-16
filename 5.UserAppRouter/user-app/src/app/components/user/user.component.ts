@@ -22,11 +22,17 @@ export class UserComponent implements OnInit{
   constructor(
     private router: Router, 
     private service: UserService,
-    private sharingData: SharingDataService){}
+    private sharingData: SharingDataService){
+      if (this.router.getCurrentNavigation()?.extras.state){
+        this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
+      }
+    }
 
 
   ngOnInit(): void {
-    this.service.findAll().subscribe(users => this.users= users);
+    if(this.users== undefined || this.users.length == 0){
+      this.service.findAll().subscribe(users => this.users= users);
+    }
   }
 
 
@@ -47,7 +53,7 @@ export class UserComponent implements OnInit{
         );
 
         this.sharingData.idUserEventEmitter.emit(id);
-        console.log(id)
+    
 
       } else if (result.dismiss === Swal.DismissReason.cancel) {
 
