@@ -19,11 +19,6 @@ export class FormUserComponent implements OnInit{
 
   user: User;
 
-  
-
-
-
-  id: number = 3;
 
   constructor(
     private service: UserService,

@@ -6,6 +6,7 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { error } from 'node:console';
 
 @Component({
   selector: 'user-app',
@@ -56,18 +57,21 @@ export class UserAppComponent implements OnInit {
 
       // Verifica si el ID del usuario es mayor que 0 (usuario existente)
       if (user.id > 0) {
-        this.service.update(user).subscribe(userUpdate => {
+        this.service.update(user).subscribe({next: (userUpdate) => {
           // Actualiza el usuario en el array 'users' reemplazando el usuario existente con los nuevos datos
           this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
-        })       
+        }, error: (err) => {console.log(err.error)}})       
+        
         // Navega a la ruta '/users' pasando los usuarios actualizados en el estado
         this.router.navigate(['/users']);
       } else {
-        this.service.create(user).subscribe(userNew => {
+        this.service.create(user).subscribe({
+          next: userNew=>{
           // Si el ID no es mayor que 0, se asume que es un nuevo usuario y se agrega al array 'users'
           this.users = [...this.users, { ...userNew }];
-        })
-        // this.cdr.detectChanges();
+        },
+        error: (err) => {console.log(err.error)}})
+
         // Luego navega de vuelta a la ruta '/users' 
         this.router.navigate(['/users']);
 
