@@ -9,30 +9,32 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name="users")
+@Entity  // Indica que esta clase es una entidad JPA
+@Table(name = "users")  // Especifica el nombre de la tabla en la base de datos
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @Id  // Indica que este atributo es la clave primaria
+    @GeneratedValue(strategy = IDENTITY)  // Genera automáticamente el valor de la clave primaria
     private Long id;
 
-    @NotBlank
+    @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String name;
 
-    @NotBlank
+    @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String lastname;
 
-    @NotEmpty
-    @Email
+    @NotEmpty  // Valida que el campo no esté vacío
+    @Email  // Valida que el campo tenga un formato de dirección de correo electrónico válido
     private String email;
 
-    @NotBlank
-    @Size(min=4, max = 12)
+    @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
+    @Size(min = 4, max = 12)  // Valida que el tamaño del campo esté entre 4 y 12 caracteres
     private String username;
 
-    @NotBlank
+    @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String password;
+
+    // Getters y setters para todos los atributos
 
     public Long getId() {
         return id;
@@ -81,6 +83,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    
 }
