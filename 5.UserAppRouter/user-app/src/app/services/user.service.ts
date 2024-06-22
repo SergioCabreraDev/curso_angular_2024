@@ -21,7 +21,7 @@ export class UserService {
   }
 
   // Método para obtener usuarios de manera paginada
-  findAllPageable(page: number): Observable<User[]> {
+  findAllPageable(page: number): Observable<any> {
     return this.http.get<User[]>(`${this.url}/page/${page}`);
   }
 

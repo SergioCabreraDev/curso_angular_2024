@@ -25,7 +25,8 @@ export class UserAppComponent implements OnInit {
     private service: UserService, 
     private sharingData: SharingDataService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,7 @@ export class UserAppComponent implements OnInit {
       // Obtener el valor del parámetro 'page' o usar '0' si no está presente
       const page = +(params.get('page') || '0');
       // Llamar al servicio para obtener los usuarios paginados
-      this.service.findAllPageable(page).subscribe(users => this.users = users);
+      this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as User[]);
     });
 
     // Suscribirse a los eventos del SharingDataService
@@ -67,9 +68,12 @@ export class UserAppComponent implements OnInit {
           next: (userUpdate) => {
             // Actualizar el usuario en el array 'users' reemplazando el usuario existente con los nuevos datos
             this.users = this.users.map(u => (u.id == userUpdate.id) ? { ...userUpdate } : u);
+                    // Forzar la detección de cambios en Angular
+        this.cd.detectChanges();
           }, 
           error: (err) => { console.log(err.error) }
         });
+
 
         // Navegar a la ruta '/users' pasando los usuarios actualizados en el estado
         this.router.navigate(['/users']);
@@ -79,12 +83,17 @@ export class UserAppComponent implements OnInit {
           next: userNew => {
             // Agregar el nuevo usuario al array 'users'
             this.users = [...this.users, { ...userNew }];
+                // Forzar la detección de cambios en Angular
+                this.cd.detectChanges();
           },
           error: (err) => { console.log(err.error) }
         });
+            
 
         // Navegar de vuelta a la ruta '/users'
         this.router.navigate(['/users']);
+
+        
       }
 
       // Mostrar una alerta de éxito usando SweetAlert2

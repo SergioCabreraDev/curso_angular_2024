@@ -30,6 +30,7 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   
     // Si 'users' está indefinido o vacío, obtiene los usuarios del servicio
     if (this.users === undefined || this.users.length === 0) {
       // Llama al servicio para obtener todos los usuarios y los asigna a 'users'
@@ -40,7 +41,7 @@ export class UserComponent implements OnInit {
         // Obtener el valor del parámetro 'page' o usar '0' si no está presente
         const page = +(params.get('page') || '0');
         // Llamar al servicio para obtener los usuarios paginados
-        this.service.findAllPageable(page).subscribe(users => this.users = users);
+        this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as User[]);
       });
     }
   }
