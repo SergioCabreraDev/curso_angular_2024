@@ -2,8 +2,16 @@ package com.springboot.backend.sergio.userapp.users_backend.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,7 +42,22 @@ public class User {
     @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String password;
 
+    @ManyToMany
+    @JoinTable(
+        name="users_roles",
+        joinColumns = {@JoinColumn(name="user_id")},
+        inverseJoinColumns = @JoinColumn(name="role_id"),
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})}
+    )
+    private List<Role> roles;
+
+    
+
     // Getters y setters para todos los atributos
+
+    public User() {
+        this.roles = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -82,5 +105,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
