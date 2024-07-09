@@ -1,10 +1,13 @@
 package com.springboot.backend.sergio.userapp.users_backend.entities;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -42,7 +45,8 @@ public class User {
     @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String password;
 
-    @ManyToMany
+    @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name="users_roles",
         joinColumns = {@JoinColumn(name="user_id")},
