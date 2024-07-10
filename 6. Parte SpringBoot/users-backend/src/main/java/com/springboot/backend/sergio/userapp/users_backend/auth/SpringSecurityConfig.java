@@ -20,6 +20,7 @@ public class SpringSecurityConfig {
                 authz
                     // Permite todas las solicitudes GET a "/api/users" y "/api/users/page/{page}"
                     .requestMatchers(HttpMethod.GET, "/api/users", "/api/users/page/{page}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "api/users/{id}").hasAnyRole("ADMIN", "USER")
                     .requestMatchers(HttpMethod.POST, "api/users").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "api/users/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "api/users/{id}").hasRole("ADMIN")
