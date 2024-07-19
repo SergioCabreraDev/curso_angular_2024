@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.backend.sergio.userapp.users_backend.auth.SimpleGrantedAuthorityJsonCreator;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -65,7 +66,9 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
  
              // Convertir los authorities del token a una colección de GrantedAuthority
              Collection<? extends GrantedAuthority> roles = Arrays.asList(
-                     new ObjectMapper().readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
+                     new ObjectMapper()
+                     .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonCreator.class)
+                     .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
              );
  
              // Crear un token de autenticación utilizando el nombre de usuario y roles
@@ -77,18 +80,14 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
              chain.doFilter(request, response);
  
          } catch (JwtException e) {
-             // Manejar la excepción en caso de que ocurra un error al analizar el token JWT
-             Map<String, String> body = new HashMap<>();
-             body.put("error", e.getMessage());
-             body.put("message", "El token no es válido");
- 
-             // Escribir el mensaje de error en la respuesta HTTP
-             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-             response.setStatus(401); // Establecer el estado de respuesta a 401 (No autorizado)
-             response.setContentType(CONTENT_TYPE); // Establecer el tipo de contenido de la respuesta
-         }
- 
-         // Continuar la cadena de filtros
-         chain.doFilter(request, response);
+            Map<String, String> body = new HashMap<>();
+            body.put("error", e.getMessage());
+            body.put("message", "El token es invalido!");
+
+            response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+            response.setStatus(401);
+            response.setContentType(CONTENT_TYPE);
+        }
+
      }
  }

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.springboot.backend.sergio.userapp.users_backend.auth.filter.JwtAuthenticationFilter;
+import com.springboot.backend.sergio.userapp.users_backend.auth.filter.JwtValidationFilter;
 
 // Marca esta clase como una clase de configuración para Spring
 @Configuration
@@ -49,6 +50,7 @@ public class SpringSecurityConfig {
                     .anyRequest().authenticated()
             )
             .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+            .addFilter(new JwtValidationFilter(authenticationManager()))
             // Desactiva la protección CSRF (Cross-Site Request Forgery)
             .csrf(config -> config.disable())
             // Configura la gestión de sesiones para que no se cree ninguna sesión (stateless)
