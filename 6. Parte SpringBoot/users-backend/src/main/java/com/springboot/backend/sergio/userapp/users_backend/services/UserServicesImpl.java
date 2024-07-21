@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +52,25 @@ public class UserServicesImpl implements UserServices {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public Optional<User> update(User user, Long id) {
+
+        Optional<User> userOptional = repository.findById(id);  // Busca el usuario por ID en el servicio
+
+        if (userOptional.isPresent()) {  // Si el usuario existe, actualiza sus datos y retorna OK con el usuario actualizado
+            User userDb = userOptional.get();
+            userDb.setEmail(user.getEmail());
+            userDb.setLastname(user.getLastname());
+            userDb.setName(user.getName());
+            userDb.setPassword(user.getPassword());
+            userDb.setUsername(user.getUsername());
+            repository.save(userDb);
+            return Optional.of(userDb);
+        }
+        return Optional.empty();
+        
     }
 }

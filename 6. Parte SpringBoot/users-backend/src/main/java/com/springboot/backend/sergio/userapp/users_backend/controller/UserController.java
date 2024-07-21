@@ -79,16 +79,10 @@ public class UserController {
             return validation(result);
         }
         
-        Optional<User> userOptional = services.findById(id);  // Busca el usuario por ID en el servicio
+        Optional<User> userOptional = services.update(user, id);  // Busca el usuario por ID en el servicio y actualiza sus datos.
 
-        if (userOptional.isPresent()) {  // Si el usuario existe, actualiza sus datos y retorna OK con el usuario actualizado
-            User userDb = userOptional.get();
-            userDb.setEmail(user.getEmail());
-            userDb.setLastname(user.getLastname());
-            userDb.setName(user.getName());
-            userDb.setPassword(user.getPassword());
-            userDb.setUsername(user.getUsername());
-            return ResponseEntity.ok(services.save(userDb));
+        if (userOptional.isPresent()) {  // Si el usuario existe, retorna OK con el usuario actualizado
+            return ResponseEntity.ok(userOptional.orElseThrow());
         }
         // Si no existe el usuario, retorna NOT_FOUND
         return ResponseEntity.notFound().build();
