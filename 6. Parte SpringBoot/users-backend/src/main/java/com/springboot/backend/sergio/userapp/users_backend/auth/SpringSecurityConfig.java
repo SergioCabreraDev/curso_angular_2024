@@ -23,7 +23,7 @@ import org.springframework.web.filter.CorsFilter;
 import com.springboot.backend.sergio.userapp.users_backend.auth.filter.JwtAuthenticationFilter;
 import com.springboot.backend.sergio.userapp.users_backend.auth.filter.JwtValidationFilter;
 
-@Configuration
+    @Configuration
 public class SpringSecurityConfig {
 
     @Autowired

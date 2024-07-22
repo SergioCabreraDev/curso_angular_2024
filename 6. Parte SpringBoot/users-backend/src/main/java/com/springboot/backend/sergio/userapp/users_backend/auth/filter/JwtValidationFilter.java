@@ -29,65 +29,63 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-// Clase que extiende BasicAuthenticationFilter para validar el JWT
 public class JwtValidationFilter extends BasicAuthenticationFilter {
-
-    // Constructor que recibe un AuthenticationManager y se lo pasa a la clase base
+    // Constructor de la clase que recibe un AuthenticationManager y lo pasa al constructor de la clase padre.
     public JwtValidationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
-    // Método que se llama para realizar el filtrado de cada solicitud HTTP
+    // Método sobreescrito que se ejecuta en cada solicitud HTTP. Es el núcleo del filtro de autenticación.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        // Obtener el valor del encabezado de autorización de la solicitud HTTP
+        // Obtiene el valor del encabezado de autorización de la solicitud HTTP.
         String header = request.getHeader(HEADER_AUTHORIZATION);
 
-        // Si el encabezado es nulo o no empieza con el prefijo BEARER, continuamos la cadena de filtros
-        if (header == null && !header.startsWith(PREFIX_TOKEN)) {
+        // Si el encabezado es nulo o no empieza con el prefijo esperado, se continúa con la cadena de filtros sin autenticar.
+        if (header == null || !header.startsWith(PREFIX_TOKEN)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Eliminar el prefijo del token para obtener solo el token JWT
+        // Elimina el prefijo del token para obtener el token puro.
         String token = header.replace(PREFIX_TOKEN, "");
-
         try {
-            // Analizar el token JWT utilizando la clave secreta y obtener los claims (reclamaciones)
+            // Analiza y verifica el token usando la clave secreta. Obtiene los reclamos (claims) del token.
             Claims claims = Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
             
-             // Obtener otro campo específico del token, en este caso "username"
-             String username = (String) claims.get("username");
+            // Obtiene el sujeto (username) del token.
+            String username = claims.getSubject();
+
+            // Obtiene las autoridades (roles) del token.
+            Object authoritiesClaims = claims.get("authorities");
+
+            // Convierte las autoridades a una colección de objetos GrantedAuthority.
+            Collection<? extends GrantedAuthority> roles = Arrays.asList(new ObjectMapper()
+            .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonCreator.class)
+                    .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class));
+
+            // Crea un token de autenticación con el nombre de usuario y las autoridades.
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, 
+                    roles);
             
-             // Obtener los authorities (roles/autoridades) del token
-             Object authoritiesClaims = claims.get("authorities");
- 
-             // Convertir los authorities del token a una colección de GrantedAuthority
-             Collection<? extends GrantedAuthority> roles = Arrays.asList(
-                     new ObjectMapper()
-                     .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonCreator.class)
-                     .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
-             );
- 
-             // Crear un token de autenticación utilizando el nombre de usuario y roles
-             UsernamePasswordAuthenticationToken authenticationToken = 
-                     new UsernamePasswordAuthenticationToken(username, null, roles);
- 
-             // Establecer el token de autenticación en el contexto de seguridad
-             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-             chain.doFilter(request, response);
- 
-         } catch (JwtException e) {
+            // Establece el contexto de seguridad con el token de autenticación.
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            
+            // Continúa con la cadena de filtros.
+            chain.doFilter(request, response);
+
+        } catch (JwtException e) {
+            // Maneja la excepción en caso de que el token sea inválido.
             Map<String, String> body = new HashMap<>();
             body.put("error", e.getMessage());
             body.put("message", "El token es invalido!");
 
+            // Escribe la respuesta de error en formato JSON.
             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
-            response.setStatus(401);
-            response.setContentType(CONTENT_TYPE);
+            response.setStatus(401); // Establece el estado HTTP a 401 (No autorizado).
+            response.setContentType(CONTENT_TYPE); // Establece el tipo de contenido de la respuesta.
         }
-
-     }
- }
+    }
+}
