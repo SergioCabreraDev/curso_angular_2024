@@ -73,53 +73,70 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return this.authenticationManager.authenticate(authenticationToken);
     }
 
+    // Método que se llama cuando la autenticación es exitosa
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
         
-            org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)authResult.getPrincipal();
+            // Obtiene el usuario autenticado
+            org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authResult.getPrincipal();
             String username = user.getUsername();
 
+            // Obtiene los roles del usuario
             Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();
 
+            // Verifica si el usuario tiene el rol de ADMIN
+            boolean isAdmin = roles.stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+            // Crea los claims para el JWT
             Claims claims = Jwts.claims()
             .add("authorities", new ObjectMapper().writeValueAsString(roles))
-            .add("username", username).build();
+            .add("username", username)
+            .add("isAdmin", isAdmin)
+            .build();
  
+            // Construye el token JWT
             String jwt = Jwts.builder()
                     .subject(username)
                     .claims(claims)
                     .signWith(SECRET_KEY)
                     .issuedAt(new Date())
-                    .expiration(new Date(System.currentTimeMillis() + 3600000))
+                    .expiration(new Date(System.currentTimeMillis() + 3600000)) // Token expira en 1 hora
                 .compact();
 
+            // Añade el token JWT en la cabecera de la respuesta
             response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + jwt);
 
+            // Crea un cuerpo de respuesta JSON con el token y el nombre de usuario
             Map<String, String> body = new HashMap<>();
             body.put("token", jwt);
             body.put("username", username);
+            body.put("is Admin", String.valueOf(isAdmin));
             body.put("messsage", String.format("%s,HAS INICIADO SESION CON EXITO", username));
 
+            // Escribe el cuerpo de respuesta en la respuesta HTTP
             response.getWriter().write(new ObjectMapper().writeValueAsString(body));
             response.setContentType(CONTENT_TYPE);
 
+            // Establece el estado de la respuesta HTTP a 200 (OK)
             response.setStatus(200);
-
     }
 
+    // Método que se llama cuando la autenticación falla
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
 
+        // Crea un cuerpo de respuesta JSON con un mensaje de error
         Map<String, String> body = new HashMap<>();
         body.put("message", "Error en la autenticacion con username o password incorrecto!");
         body.put("error", failed.getMessage());
 
+        // Escribe el cuerpo de respuesta en la respuesta HTTP
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setContentType(CONTENT_TYPE);
+
+        // Establece el estado de la respuesta HTTP a 401 (Unauthorized)
         response.setStatus(401);
     }
-
 }
-

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.backend.sergio.userapp.users_backend.entities.User;
+import com.springboot.backend.sergio.userapp.users_backend.models.UserRequest;
 import com.springboot.backend.sergio.userapp.users_backend.services.UserServices;
 
 import jakarta.validation.Valid;
@@ -74,7 +75,7 @@ public class UserController {
 
     // Método para actualizar un usuario existente por su ID
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody User user, BindingResult result, @PathVariable Long id) {
+    public ResponseEntity<?> update(@Valid @RequestBody UserRequest user, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {  // Si hay errores de validación, retorna una respuesta de validación
             return validation(result);
         }

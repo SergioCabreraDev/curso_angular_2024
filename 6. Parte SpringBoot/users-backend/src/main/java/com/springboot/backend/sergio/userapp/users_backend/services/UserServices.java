@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.springboot.backend.sergio.userapp.users_backend.entities.User;
+import com.springboot.backend.sergio.userapp.users_backend.models.UserRequest;
 
 public interface UserServices {
 
@@ -20,5 +21,5 @@ public interface UserServices {
 
     void deleteById(Long id);
     
-    Optional<User> update(User user, Long id);
+    Optional<User> update(UserRequest user, Long id);
 }

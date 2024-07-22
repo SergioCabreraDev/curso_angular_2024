@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.springboot.backend.sergio.userapp.users_backend.models.IUser;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +25,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity  // Indica que esta clase es una entidad JPA
 @Table(name = "users")  // Especifica el nombre de la tabla en la base de datos
-public class User {
+public class User implements IUser{
 
     @Id  // Indica que este atributo es la clave primaria
     @GeneratedValue(strategy = IDENTITY)  // Genera automáticamente el valor de la clave primaria
@@ -41,6 +44,10 @@ public class User {
     @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     @Size(min = 4, max = 12)  // Valida que el tamaño del campo esté entre 4 y 12 caracteres
     private String username;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean admin;
 
     @NotBlank  // Valida que el campo no esté en blanco ni sea nulo
     private String password;
@@ -117,5 +124,13 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
