@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'user',
@@ -21,7 +22,8 @@ export class UserComponent implements OnInit {
     private router: Router, 
     private service: UserService,
     private sharingData: SharingDataService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: AuthService
   ) {
     // Verifica si hay estado pasado en la navegación actual y lo asigna a 'users'
     if (this.router.getCurrentNavigation()?.extras.state) {
@@ -73,5 +75,9 @@ export class UserComponent implements OnInit {
   updateSelectedUser(user: User): void {
     // Navega a la ruta de edición del usuario con el ID del usuario seleccionado
     this.router.navigate(['/users/edit', user.id]);
+  }
+
+  get admin(){
+    return this.auth.isAdmin();
   }
 }

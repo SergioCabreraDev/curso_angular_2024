@@ -7,6 +7,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { error } from 'node:console';
+import { AuthService } from '../services/auth.service';
+import { response } from 'express';
 
 @Component({
   selector: 'user-app',
@@ -26,7 +28,8 @@ export class UserAppComponent implements OnInit {
     private sharingData: SharingDataService,
     private router: Router,
     private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +45,43 @@ export class UserAppComponent implements OnInit {
     this.addUser();
     this.removeUser();
     this.findUserById();
+    this.handlerLogin();
+  }
+
+  handlerLogin(){
+    this.sharingData.handlerLoginEventEmitter.subscribe(({username, password}) =>{ console.log(username+ " "+password);
+    this.authService.loginUser({username, password}).subscribe({
+      next: response => {
+
+            const token = response.token;
+            // console.log(token);
+            const payload = this.authService.getPayload(token);
+
+            const user = {username: payload.sub};
+               // console.log(payload);
+            const login = {
+              user,
+              isAuth: true,
+              isAdmin: payload.isAdmin
+            }
+
+            this.authService.token = token;
+            this.authService.user = login;
+
+            this.router.navigate(['/users/page/0']);
+         
+      },
+      error: error =>{
+        if(error.status == 401){
+          Swal.fire('Error en el login', error.error.message, 'error');
+        }else{
+          throw error;
+        }
+
+      }
+    })
+  });
+  
   }
 
   // Método para encontrar un usuario por ID
